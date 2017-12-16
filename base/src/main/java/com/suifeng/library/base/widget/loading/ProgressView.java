@@ -42,9 +42,7 @@ import com.wang.avi.indicator.SemiCircleSpinIndicator;
 import com.wang.avi.indicator.SquareSpinIndicator;
 import com.wang.avi.indicator.TriangleSkewSpinIndicator;
 
-/**
- * Created by fangxiao on 15/12/2.
- */
+
 public class ProgressView extends View {
     //indicators
     public static final int BallPulse=0;

@@ -2,16 +2,14 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 25
-    buildToolsVersion "25.0.3"
+    buildToolsVersion '26.0.2'
     defaultConfig {
         applicationId "com.suifeng.app.demo.baseproject"
         minSdkVersion 18
         targetSdkVersion 22
         versionCode 1
         versionName "1.0"
-        jackOptions {
-            enabled true
-        }
+        javaCompileOptions { annotationProcessorOptions { includeCompileClasspath = true } }
     }
     buildTypes {
         release {
@@ -27,4 +25,5 @@ android {
 
 dependencies {
     compile project(':base')
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.6.0'
 }

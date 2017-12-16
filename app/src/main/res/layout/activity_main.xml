@@ -4,12 +4,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <RelativeLayout
-        android:id="@+id/title_rl"
+    <TextView
+        android:id="@+id/tv_title"
         android:layout_width="match_parent"
         android:layout_height="70dp"
+        android:textColor="@color/white"
+        android:gravity="bottom|center_horizontal"
         android:background="@color/c_1379d6">
 
-    </RelativeLayout>
+    </TextView>
 
 </RelativeLayout>

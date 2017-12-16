@@ -2,7 +2,7 @@ package com.suifeng.app.demo.baseproject;
 
 import android.os.Bundle;
 import android.view.View;
-import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.suifeng.library.base.eventbus.EventCenter;
 import com.suifeng.library.base.netstatus.NetUtils;
@@ -12,14 +12,8 @@ import butterknife.BindView;
 
 public class MainActivity extends BaseAppCompatActivity {
 
-    @BindView(R.id.title_rl)
-    RelativeLayout titleRl;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-    }
+    @BindView(R.id.tv_title)
+    TextView titleTv;
 
     @Override
     protected void getBundleExtras(Bundle extras) {
@@ -33,7 +27,7 @@ public class MainActivity extends BaseAppCompatActivity {
 
     @Override
     protected void initViewsAndEvents() {
-
+        titleTv.setText("Hello World");
     }
 
     @Override
