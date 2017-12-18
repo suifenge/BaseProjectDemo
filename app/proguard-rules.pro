@@ -27,11 +27,7 @@
 #-------------------------------------------基本不用动区域--------------------------------------------
 #---------------------------------基本指令区----------------------------------
 -optimizationpasses 5
--dontusemixedcaseclassnames
--dontskipnonpubliclibraryclasses
 -dontskipnonpubliclibraryclassmembers
--dontpreverify
--verbose
 -printmapping proguardMapping.txt
 -optimizations !code/simplification/cast,!field/*,!class/merging/*
 -keepattributes *Annotation*,InnerClasses
@@ -51,16 +47,6 @@
 -keep public class com.android.vending.licensing.ILicensingService
 -keep class android.support.** {*;}
 
--keepclasseswithmembernames class * {
-    native <methods>;
-}
--keepclassmembers class * extends android.app.Activity{
-    public void *(android.view.View);
-}
--keepclassmembers enum * {
-    public static **[] values();
-    public static ** valueOf(java.lang.String);
-}
 -keep public class * extends android.view.View{
     *** get*();
     void set*(***);
@@ -71,9 +57,6 @@
 -keepclasseswithmembers class * {
     public <init>(android.content.Context, android.util.AttributeSet);
     public <init>(android.content.Context, android.util.AttributeSet, int);
-}
--keep class * implements android.os.Parcelable {
-  public static final android.os.Parcelable$Creator *;
 }
 -keepclassmembers class * implements java.io.Serializable {
     static final long serialVersionUID;
@@ -103,4 +86,4 @@
     public void *(android.webkit.WebView, jav.lang.String);
 }
 #----------------------------------------------------------------------------
-#---
+#---------------------------------------------------------------------------------------------------
