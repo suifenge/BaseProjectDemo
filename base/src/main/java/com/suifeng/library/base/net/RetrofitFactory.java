@@ -1,9 +1,9 @@
-package com.suifeng.app.demo.baseproject.net;
+package com.suifeng.library.base.net;
 
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.suifeng.app.demo.baseproject.CustomApplication;
+import com.suifeng.library.base.BaseApplication;
 import com.suifeng.library.base.netstatus.NetUtils;
 
 import java.io.File;
@@ -39,13 +39,18 @@ public class RetrofitFactory {
      * 初始化OKHttpClient,设置缓存,设置超时时间,设置打印日志,设置UA拦截器
      */
     private static void initOkHttpClient() {
-        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor(message ->{});
+        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor(new HttpLoggingInterceptor.Logger() {
+            @Override
+            public void log(String message) {
+
+            }
+        });
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         if (mOkHttpClient == null) {
             synchronized (RetrofitFactory.class) {
                 if (mOkHttpClient == null) {
                     //设置Http缓存
-                    Cache cache = new Cache(new File(CustomApplication.getInstance().getCacheDir(), "HttpCache"), 1024 * 1024 * 10);
+                    Cache cache = new Cache(new File(BaseApplication.getInstance().getCacheDir(), "HttpCache"), 1024 * 1024 * 10);
                     mOkHttpClient = new OkHttpClient.Builder()
                             .cache(cache)
                             .addInterceptor(interceptor)
@@ -86,7 +91,7 @@ public class RetrofitFactory {
     /**
      * 根据传入的baseUrl，和api创建retrofit
      */
-    private static <T> T createApi(Class<T> clazz, String baseUrl) {
+    public static <T> T createApi(Class<T> clazz, String baseUrl) {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(baseUrl)
                 .client(mOkHttpClient)
@@ -114,7 +119,7 @@ public class RetrofitFactory {
             // 无网络时，设置超时为1天
             int maxStale = 60 * 60 * 24;
             Request request = chain.request();
-            if (NetUtils.isNetworkAvailable(CustomApplication.getInstance())) {
+            if (NetUtils.isNetworkAvailable(BaseApplication.getInstance())) {
                 //有网络时只从网络获取
                 request = request.newBuilder().cacheControl(CacheControl.FORCE_NETWORK).build();
             } else {
@@ -122,7 +127,7 @@ public class RetrofitFactory {
                 request = request.newBuilder().cacheControl(CacheControl.FORCE_CACHE).build();
             }
             Response response = chain.proceed(request);
-            if (NetUtils.isNetworkAvailable(CustomApplication.getInstance())) {
+            if (NetUtils.isNetworkAvailable(BaseApplication.getInstance())) {
                 response = response.newBuilder()
                         .removeHeader("Pragma")
                         .header("Cache-Control", "public, max-age=" + maxAge)

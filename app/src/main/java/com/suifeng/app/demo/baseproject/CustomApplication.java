@@ -1,23 +1,15 @@
 package com.suifeng.app.demo.baseproject;
 
-import android.app.Application;
+import com.suifeng.library.base.BaseApplication;
 
 /**
  * Created by zhuoyue on 2017/12/4.
  */
 
-public class CustomApplication extends Application{
-
-    public static CustomApplication mInstance;
+public class CustomApplication extends BaseApplication {
 
     @Override
-    public void onCreate() {
-        super.onCreate();
-        mInstance = this;
-    }
+    protected void initApp() {
 
-    public static CustomApplication getInstance() {
-        return mInstance;
     }
-
 }
