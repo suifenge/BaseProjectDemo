@@ -27,6 +27,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class RetrofitFactory {
 
     private static final long TIMEOUT = 30;
+    private static final long READ_AND_WRITE_TIMEOUT = 20;
 
     private static OkHttpClient mOkHttpClient;
 
@@ -38,7 +39,7 @@ public class RetrofitFactory {
      * 初始化OKHttpClient,设置缓存,设置超时时间,设置打印日志,设置UA拦截器
      */
     private static void initOkHttpClient() {
-        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
+        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor(message ->{});
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         if (mOkHttpClient == null) {
             synchronized (RetrofitFactory.class) {
@@ -50,9 +51,9 @@ public class RetrofitFactory {
                             .addInterceptor(interceptor)
                             .addNetworkInterceptor(new CacheInterceptor())
                             .retryOnConnectionFailure(true)
-                            .connectTimeout(30, TimeUnit.SECONDS)
-                            .writeTimeout(20, TimeUnit.SECONDS)
-                            .readTimeout(20, TimeUnit.SECONDS)
+                            .connectTimeout(TIMEOUT, TimeUnit.SECONDS)
+                            .writeTimeout(READ_AND_WRITE_TIMEOUT, TimeUnit.SECONDS)
+                            .readTimeout(READ_AND_WRITE_TIMEOUT, TimeUnit.SECONDS)
                             .build();
                 }
             }
@@ -60,20 +61,18 @@ public class RetrofitFactory {
     }
 
     // Retrofit是基于OkHttpClient的，可以创建一个OkHttpClient进行一些配置
-    private static OkHttpClient httpClient = new OkHttpClient.Builder()
+    /*private static OkHttpClient httpClient = new OkHttpClient.Builder()
             // 这里可以添加通用的Header
             .addInterceptor(new Interceptor() {
                 @Override
                 public Response intercept(Chain chain) throws IOException {
                     Request.Builder builder = chain.request().newBuilder();
-//                    builder.addHeader();
+                    builder.addHeader();
                     return chain.proceed(builder.build());
                 }
             })
-            /*
             这里可以添加一个HttpLoggingInterceptor，因为Retrofit封装好了从Http请求到解析，
             出了bug很难找出来问题，添加HttpLoggingInterceptor拦截器方便调试接口
-             */
             .addInterceptor(new HttpLoggingInterceptor(new HttpLoggingInterceptor.Logger() {
                 @Override
                 public void log(String message) {
@@ -82,7 +81,7 @@ public class RetrofitFactory {
             }).setLevel(HttpLoggingInterceptor.Level.BASIC))
             .connectTimeout(TIMEOUT, TimeUnit.SECONDS)
             .readTimeout(TIMEOUT, TimeUnit.SECONDS)
-            .build();
+            .build();*/
 
     /**
      * 根据传入的baseUrl，和api创建retrofit
@@ -90,7 +89,7 @@ public class RetrofitFactory {
     private static <T> T createApi(Class<T> clazz, String baseUrl) {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(baseUrl)
-                .client(httpClient)
+                .client(mOkHttpClient)
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create(buildGson()))
                 .build();
